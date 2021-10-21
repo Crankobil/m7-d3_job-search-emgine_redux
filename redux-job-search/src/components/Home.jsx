@@ -1,5 +1,6 @@
 
-import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
+import { useState, useEffect } from "react";
 /* import { Redirect } from "react-router-dom";
 import { connect } from "react-redux"; */
 /* 
@@ -33,8 +34,31 @@ const Home = (/* { setError, setJobs } */) => {
     e.preventDefault();
     setJobs(position, location);
   }; */
+const [jobs, setJobs] = useState([])
+
+const getJobs = async () => {
+try {
+    const response = await fetch('https://strive-jobs-api.herokuapp.com/jobs?limit=20')
+    if(response.ok){
+        const jobData = response.json()
+        console.log("data", jobData.data)
+        setJobs(jobData)
+    }
+} catch (error) {
+    console.log(error)
+}
+}
+
+useEffect(() => {
+    getJobs()
+}, [])
+
+console.log("jobs:", jobs)
+  
+
+
   return (
-    
+    <>
         <Container>
           <Form >
             <Row>
@@ -52,7 +76,40 @@ const Home = (/* { setError, setJobs } */) => {
               </Button>
             </Row>
           </Form>
+          
+          <Table striped bordered hover>          
+<thead>
+  <tr>
+    <th>#</th>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Username</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td>1</td>
+    <td>Mark</td>
+    <td>Otto</td>
+    <td>@mdo</td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Jacob</td>
+    <td>Thornton</td>
+    <td>@fat</td>
+  </tr>
+  <tr>
+    <td>3</td>
+    <td colSpan="2">Larry the Bird</td>
+    <td>@twitter</td>
+  </tr>
+</tbody>
+</Table>
         </Container>
+
+
+</>
       )
 };
 
